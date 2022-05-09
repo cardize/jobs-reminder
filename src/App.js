@@ -11,15 +11,25 @@ function App() {
       </div>
       <div className="body-container">
         <div className="create-job">
-          <h1>Create Job</h1>
+          <h2>Create New Job</h2>
+          <div className="create-job-elements">
+            <div className="create-job-element">
+              <h4>Job Name</h4>
+              <input className="job-input"></input>
+            </div>
+            <div className="create-job-element">
+              <h4>Job Priority</h4>
+              <input className="job-input"></input>
+            </div>
+            <button className="job-button">+ Create</button>
+          </div>
         </div>
-
         <div className="list-job">
-          <h1>List Job</h1>
+          <h2>List Job</h2>
         </div>
       </div>
       <div className="footer-container">
-        <h1>Footer</h1>
+        <h3>Footer</h3>
       </div>
     </div>
   )
