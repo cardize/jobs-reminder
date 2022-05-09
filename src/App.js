@@ -19,9 +19,20 @@ function App() {
             </div>
             <div className="create-job-element">
               <h4>Job Priority</h4>
-              <input className="job-input"></input>
+              <select
+                className="select-priority"
+                name="priority"
+                id="priority"
+                form="priorityform"
+              >
+                <option value="urgent">Urgent</option>
+                <option value="regular">Regular</option>
+                <option value="trivial">Trivial</option>
+              </select>
             </div>
-            <button className="job-button">+ Create</button>
+            <button className="job-button">
+              <span className="plus-button">+ </span>Create
+            </button>
           </div>
         </div>
         <div className="list-job">
