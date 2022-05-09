@@ -1,0 +1,37 @@
+<svg width="35" height="35" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <line fill="none" x1="0" y1="15.81181" x2="0.875" y2="16.81181" id="svg_5" />
+  <rect
+      transform="rotate(145 17.0751 5.34111)"
+      stroke="null"
+      fill="#ff0000"
+      x="3.40024"
+      y="0.36839"
+      width="27.34966"
+      height="9.94544"
+      id="svg_1"
+    />
+  <rect
+      transform="rotate(145 17.6246 18.3243)"
+      fill="#ffff00"
+      stroke="null"
+      x="4.12457"
+      y="13.32428"
+      width="27"
+      height="10"
+      id="svg_4"
+    />
+  <rect
+      transform="rotate(145 17.4996 31.494)"
+      fill="#0000ff"
+      x="3.99957"
+      y="26.49403"
+      width="27"
+      height="10"
+      id="svg_6"
+      stroke="null"
+    />
+ </g>
+
+</svg>
