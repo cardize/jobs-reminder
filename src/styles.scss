@@ -1,7 +1,8 @@
 div {
+  display: grid;
+  justify-content: space-evenly;
   margin: 0;
   padding: 0;
-  display: grid;
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -15,7 +16,9 @@ h4 {
 .main-container {
   height: 100%;
   width: 100%;
-  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   border-radius: 3px;
 }
 
@@ -42,19 +45,15 @@ h4 {
   height: 100%;
   width: 100%;
   .create-job {
-    margin-bottom: 1rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 2rem;
     .create-job-elements {
       margin-bottom: 2rem;
       align-items: center;
+      justify-content: space-between;
       display: flex;
       .create-job-element {
         margin: 0rem 1rem 0rem 0rem;
         display: grid;
         align-content: center;
-        margin-right: 1rem;
         .job-input {
           min-width: 400px;
           border-radius: 3px;
@@ -64,6 +63,7 @@ h4 {
           color: rgb(62, 52, 118);
         }
         .select-priority {
+          margin-left: 1rem;
           width: 100px;
           border-radius: 3px;
           height: 34px;
@@ -80,14 +80,15 @@ h4 {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+        margin-left: 1rem;
         margin-top: 4rem;
         border: none;
         font-size: 16px;
         color: #fff;
         border-radius: 3px;
-        background-color: #5978a9;
         height: 33px;
         width: 106px;
+        cursor: pointer;
         .plus-button {
           font-family: 'Courier New', Courier, monospace;
           font-size: 30px;
@@ -98,28 +99,28 @@ h4 {
 }
 
 .search-job {
-  margin-bottom: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
   margin-bottom: 2rem;
   .search-title {
     display: flex;
     justify-content: space-between;
-    margin-right: 1rem;
   }
   .search-job-elements {
-    margin-bottom: 2rem;
-    align-items: center;
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 60px;
+    background-color: #eae6f4;
+    border-radius: 5px;
+    border: none;
     .search-job-element {
-      margin: 0rem 1rem 0rem 0rem;
       display: grid;
       align-content: center;
       margin-right: 1rem;
       .job-input-2 {
+        margin-left: 1rem;
         min-width: 400px;
         border-radius: 3px;
-        border: 1px solid #ccc;
+        border: none;
         height: 30px;
         font-size: 20px;
         color: rgb(62, 52, 118);
@@ -131,8 +132,8 @@ h4 {
         text-indent: 0.5rem;
         font-size: 16px;
         font-family: 'Open Sans', sans-serif;
-        border: 1px solid #ccc;
         color: rgb(62, 52, 118);
+        border: none;
         cursor: pointer;
         appearance: none;
       }
@@ -142,10 +143,22 @@ h4 {
 
 @media (min-width: 1000px) {
   .job-input,
-  .job-search,
+  .job-search {
+    width: 700px;
+  }
   .job-input-2,
   .job-search-2 {
     width: 700px;
+  }
+}
+
+.jobs-container {
+  display: grid;
+  .jobs-title {
+    display: flex;
+  }
+  .jobs {
+    display: flex;
   }
 }
 
@@ -153,5 +166,6 @@ h4 {
   height: 100%;
   width: 100%;
   display: flex;
+  border-radius: 5px;
   background-color: rgb(244, 244, 244);
 }
