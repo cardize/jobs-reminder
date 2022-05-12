@@ -23,7 +23,12 @@ h4 {
 }
 .priority {
   width: 200px;
+  cursor: pointer;
+  &:hover {
+    color: #e48185;
+  }
 }
+
 .j-priority {
   display: flex;
   justify-content: center;
@@ -172,7 +177,7 @@ h4 {
         font-size: 16px;
         color: rgb(62 52 118);
         text-indent: 2.2rem;
-        background: transparent url('./assets/search.svg') no-repeat 10px center;
+        background: white url('./assets/search.svg') no-repeat 10px center;
       }
       .select-priority-2 {
         width: 223px;
@@ -232,6 +237,8 @@ h4 {
   .jobs-title {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    height: 40px;
     border: none;
     border-radius: 5px;
     background-color: rgb(211, 205, 248);
@@ -240,6 +247,7 @@ h4 {
   .jobs {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
   }
 }
 
@@ -352,6 +360,73 @@ label {
   }
   to {
     transform: scaleY(0);
+  }
+}
+
+.pop-up-back {
+  margin: -20rem;
+  padding: 0;
+  position: fixed;
+  height: 200%;
+  width: 200%;
+  background: rgb(140, 140, 140);
+  opacity: 50%;
+}
+
+.popup-container {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  width: 448px;
+  height: 288px;
+  z-index: 1;
+  .popup {
+    display: grid;
+    position: absolute;
+    margin: 10rem;
+    width: 440px;
+    height: 220px;
+    border-radius: 5px;
+    background-attachment: none;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+    align-content: center;
+    .confirmation-text {
+      display: flex;
+      font-size: 20px;
+      justify-content: center;
+    }
+    .confirmation-icon {
+      margin-top: 1rem;
+      height: 51px;
+      width: 400px;
+      display: flex;
+      background: transparent url('./assets/warning.svg') no-repeat center
+        center;
+    }
+    .button-container {
+      display: flex;
+      .cancel-button {
+        height: 33px;
+        width: 120px;
+        font-size: 18px;
+        background-color: rgb(224, 224, 224);
+        color: rgb(93, 93, 93);
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .approve-button {
+        height: 33px;
+        width: 120px;
+        font-size: 18px;
+        background-color: rgb(243, 48, 87);
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    }
   }
 }
 
