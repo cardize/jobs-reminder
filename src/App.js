@@ -2,7 +2,7 @@ import React from 'react'
 import './styles.scss'
 import logo from './images/logo.svg'
 import data from './data/mock-data.json'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Pagination from './Pagination'
 
 let pageSize = 5
@@ -19,10 +19,10 @@ const App = () => {
   const [jobs, setJobs] = useState(localJobs)
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
+  const [priorityNumber, setPriorityNumber] = useState('')
   const [isAdded, setIsAdded] = useState(false)
 
   const addJob = () => {
-    console.log('add job')
     setJobName(jobName)
     setJobPriority(jobPriority)
     const newJobs = JSON.parse(localStorage.getItem('jobs'))
@@ -30,6 +30,7 @@ const App = () => {
       id: Date.now(),
       job_name: jobName,
       job_priority: jobPriority ? jobPriority : 'Regular',
+      priority_number: priorityNumber ? priorityNumber : 2,
     }
 
     if (jobName !== '') {
@@ -41,10 +42,26 @@ const App = () => {
     setJobs(JSON.parse(localStorage.getItem('jobs')))
   }
 
+  const filterJobsName = (value) => {
+    setJobs(
+      localJobs.filter((job) =>
+        job.job_name.toLowerCase().includes(value.toLowerCase()),
+      ),
+    )
+  }
+
+  const filterJobsPriority = (value) => {
+    setJobs(localJobs.filter((job) => job.job_priority === value))
+  }
+
+  const orderedJobs = useMemo(() => {
+    return jobs.sort((a, b) => a.priority_number - b.priority_number)
+  }, [jobs])
+
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
     const lastPageIndex = firstPageIndex + pageSize
-    return jobs.slice(firstPageIndex, lastPageIndex)
+    return orderedJobs.slice(firstPageIndex, lastPageIndex)
   }, [jobs, currentPage])
 
   return (
@@ -74,16 +91,17 @@ const App = () => {
                 name="priority"
                 id="priority"
                 form="priorityform"
+                onChange={(event) => setJobPriority(event.target.value)}
               >
-                <option>Choose</option>
-                <option value="urgent">Urgent</option>
-                <option value="regular">Regular</option>
-                <option value="trivial">Trivial</option>
+                <option value="Regular">Choose </option>
+                <option value="Urgent">Urgent</option>
+                <option value="Regular">Regular</option>
+                <option value="Trivial">Trivial</option>
               </select>
             </div>
             <button
               className="job-button"
-              onClick={() => addJob(jobName)}
+              onClick={() => addJob(jobName, jobPriority)}
               disabled={isAdded}
               style={{
                 cursor: isAdded ? '' : 'pointer',
@@ -98,24 +116,85 @@ const App = () => {
         <div className="search-job">
           <div className="search-title">
             <h2>Jobs List</h2>
-            <h2>3/3</h2>
+            <h3>
+              {jobs.length}/{localJobs.length}
+            </h3>
           </div>
           <div className="search-job-elements">
             <div className="search-job-element">
-              <input className="job-input-2"></input>
+              <input
+                className="job-input-2"
+                onChange={(event) => filterJobsName(event.target.value)}
+              ></input>
             </div>
-            <div className="search-job-element">
-              <select
-                className="select-priority-2"
-                name="priority"
-                id="priority"
-                form="priorityform"
-              >
-                <option>Priority (All)</option>
-                <option value="urgent">Urgent</option>
-                <option value="regular">Regular</option>
-                <option value="trivial">Trivial</option>
-              </select>
+            <div className="sort-h">
+              <div className="select-box">
+                <div className="select-box__current" tabIndex="1">
+                  <div className="select-box__value">
+                    <input
+                      className="select-box__input"
+                      type="radio"
+                      id="0"
+                      name="Cardize"
+                      defaultChecked="defaulChecked"
+                      onChange={() => setJobs(localJobs)}
+                    />
+                    <p className="select-box__input-text">Priority (All)</p>
+                  </div>
+                  <div className="select-box__value">
+                    <input
+                      className="select-box__input"
+                      type="radio"
+                      id="1"
+                      name="Cardize"
+                      onChange={() => filterJobsPriority('Urgent')}
+                    />
+                    <p className="select-box__input-text">Urgent</p>
+                  </div>
+                  <div className="select-box__value">
+                    <input
+                      className="select-box__input"
+                      type="radio"
+                      id="2"
+                      name="Cardize"
+                      onChange={() => filterJobsPriority('Regular')}
+                    />
+                    <p className="select-box__input-text">Regular</p>
+                  </div>
+                  <div className="select-box__value">
+                    <input
+                      className="select-box__input"
+                      type="radio"
+                      id="3"
+                      name="Cardize"
+                      onChange={() => filterJobsPriority('Trivial')}
+                    />
+                    <p className="select-box__input-text">Trivial</p>
+                  </div>
+                </div>
+                <ul className="select-box__list">
+                  <li className="select-box__option">
+                    <label htmlFor="0" aria-hidden="aria-hidden">
+                      All
+                    </label>
+                  </li>
+                  <li className="select-box__option">
+                    <label htmlFor="1" aria-hidden="aria-hidden">
+                      Urgent
+                    </label>
+                  </li>
+                  <li className="select-box__option">
+                    <label htmlFor="2" aria-hidden="aria-hidden">
+                      Regular
+                    </label>
+                  </li>
+                  <li className="select-box__option">
+                    <label htmlFor="3" aria-hidden="aria-hidden">
+                      Trivial
+                    </label>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="jobs-container">
