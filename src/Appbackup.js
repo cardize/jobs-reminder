@@ -19,7 +19,8 @@ const App = () => {
   const [jobs, setJobs] = useState(localJobs)
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
-  const [priorityNumber, setPriorityNumber] = useState('')
+  const [isRemoved, setIsRemoved] = useState(false)
+  const [requestedId, setRequestedId] = useState()
   const [isAdded, setIsAdded] = useState(false)
 
   const addJob = () => {
@@ -29,8 +30,9 @@ const App = () => {
     const job = {
       id: Date.now(),
       job_name: jobName,
-      job_priority: jobPriority ? jobPriority : 'Regular',
-      priority_number: priorityNumber ? priorityNumber : 2,
+      job_priority: jobPriority === '' ? 'Trivial' : jobPriority,
+      priority_number:
+        jobPriority === 'Urgent' ? 1 : jobPriority === 'Regular' ? 2 : 3,
     }
 
     if (jobName !== '') {
@@ -40,6 +42,18 @@ const App = () => {
       return alert('Job name is required')
     }
     setJobs(JSON.parse(localStorage.getItem('jobs')))
+  }
+
+  const requestDelete = (id) => {
+    setRequestedId(id)
+    setIsRemoved(true)
+  }
+
+  const removeJob = () => {
+    const newJobs = jobs.filter((job) => job.id !== requestedId)
+    localStorage.setItem('jobs', JSON.stringify(newJobs))
+    setJobs(newJobs)
+    setIsRemoved(false)
   }
 
   const filterJobsName = (value) => {
@@ -55,8 +69,10 @@ const App = () => {
   }
 
   const orderedJobs = useMemo(() => {
-    return jobs.sort((a, b) => a.priority_number - b.priority_number)
-  }, [jobs])
+    return jobs.sort(
+      (a, b) => a.priority_number - b.priority_number || b.id - a.id,
+    )
+  }, [jobs, localJobs])
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
@@ -125,7 +141,7 @@ const App = () => {
               <input
                 className="job-input-2"
                 onChange={(event) => filterJobsName(event.target.value)}
-                placeholder="     Job Name"
+                placeholder="Job Name"
               ></input>
             </div>
             <div className="sort-h">
@@ -221,12 +237,43 @@ const App = () => {
                     {item.job_priority}
                   </p>
                   <button className="action-edit"></button>
-                  <button className="action-remove"></button>
+                  <button
+                    className="action-remove"
+                    onClick={() => requestDelete(item.id)}
+                  ></button>
                 </div>
               )
             })}
           </div>
         </div>
+        <div
+          className="pop-up-back"
+          style={isRemoved ? { display: 'grid' } : { display: 'none' }}
+        ></div>
+
+        <div
+          className="popup-container"
+          style={isRemoved ? { display: 'grid' } : { display: 'none' }}
+        >
+          <div className="popup">
+            <div className="confirmation-icon"></div>
+            <h3 className="confirmation-text">
+              Are you sure you want to delete it?
+            </h3>
+            <div className="button-container">
+              <button
+                className="cancel-button"
+                onClick={() => setIsRemoved(false)}
+              >
+                Cancel
+              </button>
+              <button className="approve-button" onClick={() => removeJob()}>
+                Approve
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div>
           <Pagination
             className="pagination-bar"
@@ -238,7 +285,7 @@ const App = () => {
         </div>
       </div>
       <div className="footer-container">
-        <h3>Footer</h3>
+        <p></p>
       </div>
     </div>
   )

@@ -285,7 +285,7 @@ const App = () => {
         </div>
       </div>
       <div className="footer-container">
-        <h3>Footer</h3>
+        <p>© 2022 Mustafa S Sakarya</p>
       </div>
     </div>
   )

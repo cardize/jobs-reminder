@@ -112,6 +112,7 @@ h4 {
           border: 1px solid #ccc;
           height: 30px;
           font-size: 20px;
+          text-indent: 0.5rem;
           color: rgb(62, 52, 118);
         }
         .select-priority {
@@ -120,8 +121,8 @@ h4 {
           border-radius: 3px;
           height: 34px;
           text-indent: 0.5rem;
-          font-size: 16px;
-          font-family: 'Open Sans', sans-serif;
+          font-size: 15px;
+          text-indent: 0.5rem;
           border: 1px solid #ccc;
           color: rgb(62, 52, 118);
           cursor: pointer;
@@ -196,6 +197,9 @@ h4 {
 }
 
 @media (min-width: 1000px) {
+  .popup {
+    margin-left: 15rem;
+  }
   .job-input,
   .job-search {
     width: 700px;
@@ -230,25 +234,20 @@ h4 {
   }
 }
 
-.jobs-container {
-  display: grid;
-  justify-content: space-between;
-  width: 400px;
-  .jobs-title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    background-color: rgb(211, 205, 248);
-    margin-bottom: 0.5rem;
-  }
-  .jobs {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
+.jobs-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(211, 205, 248);
+  margin-bottom: 0.5rem;
+}
+.jobs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .select-box {
@@ -374,7 +373,7 @@ label {
 }
 
 .popup-container {
-  margin: 0;
+  margin-left: 0rem;
   padding: 0;
   position: fixed;
   width: 448px;
@@ -384,6 +383,7 @@ label {
     display: grid;
     position: absolute;
     margin: 10rem;
+    margin-left: 15rem;
     width: 440px;
     height: 220px;
     border-radius: 5px;
@@ -436,4 +436,8 @@ label {
   display: flex;
   border-radius: 5px;
   background-color: rgb(244, 244, 244);
+  justify-content: flex-end;
+  padding-right: 1rem;
+  font-size: 14px;
+  align-items: center;
 }
