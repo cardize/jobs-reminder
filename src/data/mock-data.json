@@ -21,12 +21,12 @@
     "id": 4,
     "job_name": "Work on the new case work with Redux",
     "job_priority": "Regular",
-    "priority_number": 4
+    "priority_number": 2
   },
   {
     "id": 5,
     "job_name": "Run 5 km at the start of the day",
     "job_priority": "Trivial",
-    "priority_number": 5
+    "priority_number": 3
   }
 ]

@@ -30,7 +30,8 @@ const App = () => {
       id: Date.now(),
       job_name: jobName,
       job_priority: jobPriority ? jobPriority : 'Regular',
-      priority_number: priorityNumber ? priorityNumber : 2,
+      priority_number:
+        jobPriority === 'Urgent' ? 1 : jobPriority === 'Regular' ? 2 : 3,
     }
 
     if (jobName !== '') {
@@ -55,7 +56,7 @@ const App = () => {
   }
 
   const orderedJobs = useMemo(() => {
-    return jobs.sort((a, b) => a.priority_number - b.priority_number)
+    return jobs.sort((a, b) => a.priority_number > b.priority_number)
   }, [jobs])
 
   const currentTableData = useMemo(() => {
@@ -125,7 +126,7 @@ const App = () => {
               <input
                 className="job-input-2"
                 onChange={(event) => filterJobsName(event.target.value)}
-                placeholder="     Job Name"
+                placeholder="Job Name"
               ></input>
             </div>
             <div className="sort-h">
