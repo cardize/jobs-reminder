@@ -15,11 +15,11 @@ h4 {
 
 .name {
   margin-left: 1rem;
-  width: 600px;
+  width: 350px;
 }
 .j-name {
   margin-left: 1rem;
-  width: 600px;
+  width: 350px;
 }
 .priority {
   width: 200px;
@@ -35,10 +35,10 @@ h4 {
   border-radius: 5px;
 }
 .action {
-  width: 150px;
+  width: 75px;
 }
 .j-action {
-  width: 150px;
+  width: 75px;
 }
 .action-edit {
   height: 40px;
@@ -186,12 +186,36 @@ h4 {
   .job-search-2 {
     width: 700px;
   }
+  .name {
+    width: 600px;
+  }
+  .j-name {
+    width: 600px;
+  }
+  .priority {
+    width: 200px;
+  }
+  .j-priority {
+    width: 100px;
+  }
+  .action {
+    width: 150px;
+  }
+  .j-action {
+    width: 150px;
+  }
+  .jobs-container {
+    width: 978px;
+  }
+  .jobs-title {
+    width: 978px;
+  }
 }
 
 .jobs-container {
   display: grid;
   justify-content: space-between;
-  width: 978px;
+  width: 400px;
   .jobs-title {
     display: flex;
     justify-content: flex-start;
@@ -199,7 +223,6 @@ h4 {
   .jobs {
     display: flex;
     justify-content: flex-start;
-    width: 978px;
   }
 }
 
