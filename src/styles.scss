@@ -13,6 +13,42 @@ h4 {
   color: rgb(62, 52, 118);
 }
 
+.name {
+  margin-left: 1rem;
+  width: 600px;
+}
+.j-name {
+  margin-left: 1rem;
+  width: 600px;
+}
+.priority {
+  width: 200px;
+}
+.j-priority {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  color: #fff;
+  margin-right: 100px;
+  border-radius: 5px;
+}
+.action {
+  width: 150px;
+}
+.j-action {
+  width: 150px;
+}
+.action-edit {
+  height: 40px;
+  width: 40px;
+  margin-right: 1rem;
+  background-color: rgb(232, 232, 232);
+  border-radius: 5px;
+  border: none;
+}
+
 .main-container {
   height: 100%;
   width: 100%;
@@ -154,11 +190,16 @@ h4 {
 
 .jobs-container {
   display: grid;
+  justify-content: space-between;
+  width: 978px;
   .jobs-title {
     display: flex;
+    justify-content: flex-start;
   }
   .jobs {
     display: flex;
+    justify-content: flex-start;
+    width: 978px;
   }
 }
 

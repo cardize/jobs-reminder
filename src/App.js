@@ -199,17 +199,28 @@ const App = () => {
           </div>
           <div className="jobs-container">
             <div className="jobs-title">
-              <h4>Name</h4>
-              <h4>Priority</h4>
-              <h4>Action</h4>
+              <h4 className="name">Name</h4>
+              <h4 className="priority">Priority</h4>
+              <h4 className="action">Action</h4>
             </div>
             {currentTableData.map((item) => {
               return (
                 <div className="jobs" key={item.id}>
-                  <p>{item.job_name}</p>
-                  <p>{item.job_priority}</p>
-                  <button className="action-edit">Edit</button>
-                  <button className="action-edit">Remove</button>
+                  <p className="j-name">{item.job_name}</p>
+                  <p
+                    className="j-priority"
+                    style={
+                      item.job_priority === 'Urgent'
+                        ? { backgroundColor: '#E48285' }
+                        : item.job_priority === 'Regular'
+                        ? { backgroundColor: '#E1C639' }
+                        : { backgroundColor: '#5978A9' }
+                    }
+                  >
+                    {item.job_priority}
+                  </p>
+                  <button className="action-edit">E</button>
+                  <button className="action-edit">R</button>
                 </div>
               )
             })}

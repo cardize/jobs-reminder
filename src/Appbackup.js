@@ -91,16 +91,17 @@ const App = () => {
                 name="priority"
                 id="priority"
                 form="priorityform"
+                onChange={(event) => setJobPriority(event.target.value)}
               >
-                <option>Choose</option>
-                <option value="urgent">Urgent</option>
-                <option value="regular">Regular</option>
-                <option value="trivial">Trivial</option>
+                <option value="Regular">Choose </option>
+                <option value="Urgent">Urgent</option>
+                <option value="Regular">Regular</option>
+                <option value="Trivial">Trivial</option>
               </select>
             </div>
             <button
               className="job-button"
-              onClick={() => addJob(jobName)}
+              onClick={() => addJob(jobName, jobPriority)}
               disabled={isAdded}
               style={{
                 cursor: isAdded ? '' : 'pointer',
@@ -115,7 +116,9 @@ const App = () => {
         <div className="search-job">
           <div className="search-title">
             <h2>Jobs List</h2>
-            <h2>3/3</h2>
+            <h3>
+              {jobs.length}/{localJobs.length}
+            </h3>
           </div>
           <div className="search-job-elements">
             <div className="search-job-element">
@@ -170,39 +173,23 @@ const App = () => {
                   </div>
                 </div>
                 <ul className="select-box__list">
-                  <li>
-                    <label
-                      className="select-box__option"
-                      htmlFor="0"
-                      aria-hidden="aria-hidden"
-                    >
+                  <li className="select-box__option">
+                    <label htmlFor="0" aria-hidden="aria-hidden">
                       All
                     </label>
                   </li>
-                  <li>
-                    <label
-                      className="select-box__option"
-                      htmlFor="1"
-                      aria-hidden="aria-hidden"
-                    >
+                  <li className="select-box__option">
+                    <label htmlFor="1" aria-hidden="aria-hidden">
                       Urgent
                     </label>
                   </li>
-                  <li>
-                    <label
-                      className="select-box__option"
-                      htmlFor="2"
-                      aria-hidden="aria-hidden"
-                    >
+                  <li className="select-box__option">
+                    <label htmlFor="2" aria-hidden="aria-hidden">
                       Regular
                     </label>
                   </li>
-                  <li>
-                    <label
-                      className="select-box__option"
-                      htmlFor="3"
-                      aria-hidden="aria-hidden"
-                    >
+                  <li className="select-box__option">
+                    <label htmlFor="3" aria-hidden="aria-hidden">
                       Trivial
                     </label>
                   </li>
