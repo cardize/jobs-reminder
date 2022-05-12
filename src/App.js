@@ -125,6 +125,7 @@ const App = () => {
               <input
                 className="job-input-2"
                 onChange={(event) => filterJobsName(event.target.value)}
+                placeholder="     Job Name"
               ></input>
             </div>
             <div className="sort-h">
@@ -219,8 +220,8 @@ const App = () => {
                   >
                     {item.job_priority}
                   </p>
-                  <button className="action-edit">E</button>
-                  <button className="action-edit">R</button>
+                  <button className="action-edit"></button>
+                  <button className="action-remove"></button>
                 </div>
               )
             })}
