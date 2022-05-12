@@ -219,6 +219,10 @@ h4 {
   .jobs-title {
     display: flex;
     justify-content: flex-start;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(211, 205, 248);
+    margin-bottom: 0.5rem;
   }
   .jobs {
     display: flex;
