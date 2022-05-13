@@ -376,16 +376,11 @@ label {
   margin-left: 0rem;
   padding: 0;
   position: fixed;
-  width: 448px;
-  height: 288px;
   z-index: 1;
-  .popup {
+  .popup-remove,
+  .popup-edit {
     display: grid;
     position: absolute;
-    margin: 10rem;
-    margin-left: 15rem;
-    width: 440px;
-    height: 220px;
     border-radius: 5px;
     background-attachment: none;
     background-color: rgb(255, 255, 255);
@@ -428,6 +423,39 @@ label {
       }
     }
   }
+}
+.popup-remove {
+  margin: 10rem;
+  width: 440px;
+  height: 220px;
+}
+.popup-edit {
+  margin: 5rem;
+  width: 600px;
+  height: 300px;
+}
+.edit-input {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  height: 30px;
+  width: 500px;
+  margin-bottom: 1rem;
+  font-size: 16px;
+  text-indent: 0.5rem;
+}
+.edit-title {
+  padding: 0;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+.edit-priority {
+  border: 1px solid #ccc;
+  height: 35px;
+  width: 508px;
+  font-size: 16px;
+  text-indent: 0.5rem;
+  appearance: none;
+  margin-bottom: 1rem;
 }
 
 .footer-container {

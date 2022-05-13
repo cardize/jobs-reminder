@@ -56,6 +56,13 @@ const App = () => {
     setIsRemoved(false)
   }
 
+  const requestEdit = (id) => {
+    setRequestedId(id)
+    setIsEdited(true)
+  }
+
+  const editJob = (jobName, jobPriority) => {}
+
   const filterJobsName = (value) => {
     setJobs(
       localJobs.filter((job) =>
@@ -236,7 +243,10 @@ const App = () => {
                   >
                     {item.job_priority}
                   </p>
-                  <button className="action-edit"></button>
+                  <button
+                    className="action-edit"
+                    onClick={() => requestEdit(item.id)}
+                  ></button>
                   <button
                     className="action-remove"
                     onClick={() => requestDelete(item.id)}
@@ -285,7 +295,7 @@ const App = () => {
         </div>
       </div>
       <div className="footer-container">
-        <p></p>
+        <p>© 2022 Mustafa S Sakarya</p>
       </div>
     </div>
   )

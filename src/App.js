@@ -4,10 +4,11 @@ import logo from './images/logo.svg'
 import data from './data/mock-data.json'
 import { useState, useMemo } from 'react'
 import Pagination from './Pagination'
+import { connect } from 'react-redux'
 
 let pageSize = 5
 
-const App = () => {
+const App = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
 
   let localJobs = JSON.parse(localStorage.getItem('jobs'))
@@ -20,8 +21,14 @@ const App = () => {
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
   const [isRemoved, setIsRemoved] = useState(false)
+  const [isEdited, setIsEdited] = useState(false)
   const [requestedId, setRequestedId] = useState()
   const [isAdded, setIsAdded] = useState(false)
+  const [defaultName, setDefaultName] = useState('')
+  const [currentId, setCurrentId] = useState()
+  const [newName, setNewName] = useState('')
+  const [newPriority, setNewPriority] = useState('')
+  const [currentPriority, setCurrentPriority] = useState()
 
   const addJob = () => {
     setJobName(jobName)
@@ -30,7 +37,7 @@ const App = () => {
     const job = {
       id: Date.now(),
       job_name: jobName,
-      job_priority: jobPriority === '' ? 'Trivial' : jobPriority,
+      job_priority: jobPriority === '' ? currentPriority : jobPriority,
       priority_number:
         jobPriority === 'Urgent' ? 1 : jobPriority === 'Regular' ? 2 : 3,
     }
@@ -54,6 +61,28 @@ const App = () => {
     localStorage.setItem('jobs', JSON.stringify(newJobs))
     setJobs(newJobs)
     setIsRemoved(false)
+  }
+
+  const requestEdit = (id, job_name, job_priority) => {
+    setCurrentId(id)
+    setDefaultName(job_name)
+    setCurrentPriority(job_priority)
+    setIsEdited(true)
+  }
+
+  const editJob = () => {
+    const newJobs = jobs.map((job) => {
+      if (job.id === currentId) {
+        job.job_name = newName === '' ? defaultName : newName
+        job.job_priority = newPriority === '' ? currentPriority : newPriority
+        job.priority_number =
+          newPriority === 'Urgent' ? 1 : newPriority === 'Regular' ? 2 : 3
+      }
+      return job
+    })
+    localStorage.setItem('jobs', JSON.stringify(newJobs))
+    setJobs(newJobs)
+    setIsEdited(false)
   }
 
   const filterJobsName = (value) => {
@@ -109,7 +138,7 @@ const App = () => {
                 form="priorityform"
                 onChange={(event) => setJobPriority(event.target.value)}
               >
-                <option value="Regular">Choose </option>
+                <option value="Trivial">Choose </option>
                 <option value="Urgent">Urgent</option>
                 <option value="Regular">Regular</option>
                 <option value="Trivial">Trivial</option>
@@ -236,7 +265,17 @@ const App = () => {
                   >
                     {item.job_priority}
                   </p>
-                  <button className="action-edit"></button>
+                  <button
+                    className="action-edit"
+                    onClick={() =>
+                      requestEdit(
+                        item.id,
+                        item.job_name,
+                        item.job_priority,
+                        item.priority_number,
+                      )
+                    }
+                  ></button>
                   <button
                     className="action-remove"
                     onClick={() => requestDelete(item.id)}
@@ -248,14 +287,56 @@ const App = () => {
         </div>
         <div
           className="pop-up-back"
-          style={isRemoved ? { display: 'grid' } : { display: 'none' }}
+          style={
+            isRemoved || isEdited ? { display: 'grid' } : { display: 'none' }
+          }
         ></div>
+
+        <div
+          className="popup-container"
+          style={isEdited ? { display: 'grid' } : { display: 'none' }}
+        >
+          <div className="popup-edit">
+            <h4 className="edit-title">Job Name</h4>
+            <input
+              className="edit-input"
+              defaultValue={defaultName}
+              onChange={(event) => setNewName(event.target.value)}
+            ></input>
+
+            <h4 className="edit-title">Job Priority</h4>
+            <select
+              className="edit-select"
+              onChange={(event) => setNewPriority(event.target.value)}
+            >
+              <option value="">Choose </option>
+              <option value="Urgent">Urgent</option>
+              <option value="Regular">Regular</option>
+              <option value="Trivial">Trivial</option>
+            </select>
+
+            <div className="button-container">
+              <button
+                className="cancel-button"
+                onClick={() => setIsEdited(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="approve-button"
+                onClick={() => editJob(currentId, newName, newPriority)}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div
           className="popup-container"
           style={isRemoved ? { display: 'grid' } : { display: 'none' }}
         >
-          <div className="popup">
+          <div className="popup-remove">
             <div className="confirmation-icon"></div>
             <h3 className="confirmation-text">
               Are you sure you want to delete it?
@@ -284,6 +365,7 @@ const App = () => {
           />
         </div>
       </div>
+
       <div className="footer-container">
         <p>© 2022 Mustafa S Sakarya</p>
       </div>
@@ -291,4 +373,10 @@ const App = () => {
   )
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return {
+    job: state.job,
+  }
+}
+
+export default connect(mapStateToProps)(App)
