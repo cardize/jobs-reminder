@@ -91,10 +91,12 @@ const App = (props) => {
         job.job_name.toLowerCase().includes(value.toLowerCase()),
       ),
     )
+    setCurrentPage(1)
   }
 
   const filterJobsPriority = (value) => {
     setJobs(localJobs.filter((job) => job.job_priority === value))
+    setCurrentPage(1)
   }
 
   const orderedJobs = useMemo(() => {
