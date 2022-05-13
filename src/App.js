@@ -37,9 +37,15 @@ const App = (props) => {
     const job = {
       id: Date.now(),
       job_name: jobName,
-      job_priority: jobPriority === '' ? currentPriority : jobPriority,
+      job_priority: jobPriority === '' ? 'Regular' : jobPriority,
       priority_number:
-        jobPriority === 'Urgent' ? 1 : jobPriority === 'Regular' ? 2 : 3,
+        jobPriority === ''
+          ? 2
+          : jobPriority === 'Urgent'
+          ? 1
+          : jobPriority === 'Regular'
+          ? 2
+          : 3,
     }
 
     if (jobName !== '') {
@@ -140,7 +146,7 @@ const App = (props) => {
                 form="priorityform"
                 onChange={(event) => setJobPriority(event.target.value)}
               >
-                <option value="Trivial">Choose </option>
+                <option value="">Choose </option>
                 <option value="Urgent">Urgent</option>
                 <option value="Regular">Regular</option>
                 <option value="Trivial">Trivial</option>
@@ -245,6 +251,7 @@ const App = (props) => {
               </div>
             </div>
           </div>
+
           <div className="jobs-container">
             <div className="jobs-title">
               <h4 className="name">Name</h4>
@@ -290,13 +297,13 @@ const App = (props) => {
         <div
           className="pop-up-back"
           style={
-            isRemoved || isEdited ? { display: 'grid' } : { display: 'none' }
+            isRemoved || isEdited ? { display: 'flex' } : { display: 'none' }
           }
         ></div>
 
         <div
           className="popup-container"
-          style={isEdited ? { display: 'grid' } : { display: 'none' }}
+          style={isEdited ? { display: 'flex' } : { display: 'none' }}
         >
           <div className="popup-edit">
             <h4 className="edit-title">Job Name</h4>
@@ -336,7 +343,7 @@ const App = (props) => {
 
         <div
           className="popup-container"
-          style={isRemoved ? { display: 'grid' } : { display: 'none' }}
+          style={isRemoved ? { display: 'flex' } : { display: 'none' }}
         >
           <div className="popup-remove">
             <div className="confirmation-icon"></div>

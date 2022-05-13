@@ -22,7 +22,7 @@ h4 {
   width: 350px;
 }
 .priority {
-  width: 200px;
+  margin-right: 9rem;
   cursor: pointer;
   &:hover {
     color: #e48185;
@@ -197,9 +197,6 @@ h4 {
 }
 
 @media (min-width: 1000px) {
-  .popup {
-    margin-left: 15rem;
-  }
   .job-input,
   .job-search {
     width: 700px;
@@ -251,7 +248,6 @@ h4 {
 }
 
 .select-box {
-  position: relative;
   display: block;
   width: 222px;
   height: 34px;
@@ -264,7 +260,6 @@ h4 {
 
   &__current {
     display: grid;
-    position: relative;
     justify-content: start;
     width: 222px;
     height: 34px;
@@ -272,7 +267,6 @@ h4 {
     background-color: #fff;
     border-radius: 5px;
     cursor: pointer;
-    outline: none;
     &:focus {
       & + .select-box__list {
         border-radius: 5px;
@@ -369,68 +363,72 @@ label {
   height: 200%;
   width: 200%;
   background: rgb(140, 140, 140);
-  opacity: 50%;
+  opacity: 55%;
+  z-index: 1;
 }
 
 .popup-container {
-  margin-left: 0rem;
-  padding: 0;
+  display: flex;
+  justify-content: center;
   position: fixed;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+}
+.popup-remove,
+.popup-edit {
+  display: grid;
+  position: absolute;
+  border-radius: 5px;
+  background-attachment: none;
+  background-color: rgb(255, 255, 255);
   z-index: 1;
-  .popup-remove,
-  .popup-edit {
-    display: grid;
-    position: absolute;
-    border-radius: 5px;
-    background-attachment: none;
-    background-color: rgb(255, 255, 255);
-    z-index: 1;
-    align-content: center;
-    .confirmation-text {
-      display: flex;
-      font-size: 20px;
-      justify-content: center;
+  align-content: center;
+  .confirmation-text {
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+  }
+  .confirmation-icon {
+    margin-top: 1rem;
+    height: 51px;
+    width: 400px;
+    display: flex;
+    background: transparent url('./assets/warning.svg') no-repeat center center;
+  }
+  .button-container {
+    display: flex;
+    .cancel-button {
+      height: 33px;
+      width: 120px;
+      font-size: 18px;
+      background-color: rgb(224, 224, 224);
+      color: rgb(93, 93, 93);
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
     }
-    .confirmation-icon {
-      margin-top: 1rem;
-      height: 51px;
-      width: 400px;
-      display: flex;
-      background: transparent url('./assets/warning.svg') no-repeat center
-        center;
-    }
-    .button-container {
-      display: flex;
-      .cancel-button {
-        height: 33px;
-        width: 120px;
-        font-size: 18px;
-        background-color: rgb(224, 224, 224);
-        color: rgb(93, 93, 93);
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-      .approve-button {
-        height: 33px;
-        width: 120px;
-        font-size: 18px;
-        background-color: rgb(243, 48, 87);
-        color: #fff;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-      }
+    .approve-button {
+      height: 33px;
+      width: 120px;
+      font-size: 18px;
+      background-color: rgb(243, 48, 87);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
     }
   }
 }
+
 .popup-remove {
-  margin: 10rem;
   width: 440px;
   height: 220px;
 }
 .popup-edit {
-  margin: 5rem;
   width: 600px;
   height: 300px;
 }
@@ -456,6 +454,16 @@ label {
   text-indent: 0.5rem;
   appearance: none;
   margin-bottom: 1rem;
+}
+.edit-select {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  height: 34px;
+  width: 508px;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  text-indent: 0.5rem;
+  appearance: none;
 }
 
 .footer-container {
