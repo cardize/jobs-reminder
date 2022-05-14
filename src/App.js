@@ -62,10 +62,11 @@ const App = (props) => {
   }
 
   const requestEdit = (item) => {
-    props.defaultName(item)
     setRequestedId(item.id)
     setIsEdited(true)
-    console.log(item.job_name)
+    document.getElementById(
+      'edit-job-input',
+    ).innerHTML = document.getElementById('edit-job-input').value
   }
 
   const editJob = () => {
@@ -108,8 +109,8 @@ const App = (props) => {
           <div className="popup-edit">
             <h4 className="edit-title">Job Name</h4>
             <input
+              id="edit-job-input"
               className="edit-input"
-              defaultValue={''}
               onChange={(event) => setNewName(event.target.value)}
             ></input>
 
@@ -166,13 +167,13 @@ const App = (props) => {
   }, [isRemoved, isEdited, jobs, removeJob, editJob])
 
   const filterJobsPriority = (value) => {
-    setJobs(jobs.filter((job) => job.job_priority === value))
+    setJobs(props.jobs.filter((job) => job.job_priority === value))
     setCurrentPage(1)
   }
 
   const filterJobsName = (value) => {
     setJobs(
-      jobs.filter((job) =>
+      props.jobs.filter((job) =>
         job.job_name.toLowerCase().includes(value.toLowerCase()),
       ),
     )
@@ -207,8 +208,7 @@ const App = (props) => {
               <h4>Job Name</h4>
               <input
                 className="job-input"
-                type="text"
-                defaultValue={props.name}
+                onFocus={(event) => event.target.select()}
                 onChange={(e) => setJobName(e.target.value)}
                 onInput={() => setIsAdded(false)}
               ></input>
@@ -352,7 +352,11 @@ const App = (props) => {
                   </p>
                   <button
                     className="action-edit"
-                    onClick={() => requestEdit(item)}
+                    onClick={() => (
+                      requestEdit(item),
+                      (document.getElementById('edit-job-input').value =
+                        item.job_name)
+                    )}
                   ></button>
                   <button
                     className="action-remove"
