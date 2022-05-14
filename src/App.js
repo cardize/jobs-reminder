@@ -187,13 +187,13 @@ const App = (props) => {
     return props.jobs.sort(
       (a, b) => a.priority_number - b.priority_number || b.id - a.id,
     )
-  }, [props.jobs, jobs, currentPage, pageSize, removeJob, editJob, addJob])
+  }, [props.jobs, jobs, currentPage, pageSize])
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
     const lastPageIndex = firstPageIndex + pageSize
     return orderedJobs.slice(firstPageIndex, lastPageIndex)
-  }, [props.jobs, jobs, currentPage, pageSize, removeJob, editJob, addJob])
+  }, [props.jobs, jobs, currentPage, pageSize])
 
   return (
     <div className="main-container">
