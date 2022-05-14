@@ -12,8 +12,6 @@ const App = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [jobs, setJobs] = useState(props.jobs)
   const [jobName, setJobName] = useState('')
-  const [defaultName, setDefaultName] = useState('')
-  const [defaultPriority, setDefaultPriority] = useState('')
   const [jobPriority, setJobPriority] = useState('')
   const [isRemoved, setIsRemoved] = useState(false)
   const [isEdited, setIsEdited] = useState(false)
@@ -47,7 +45,6 @@ const App = (props) => {
       return alert('Job name is required')
     }
     setJobs(JSON.parse(localStorage.getItem('jobs')))
-    console.log(job)
     props.importJob(job)
   }
 
@@ -65,8 +62,10 @@ const App = (props) => {
   }
 
   const requestEdit = (item) => {
+    props.defaultName(item)
     setRequestedId(item.id)
     setIsEdited(true)
+    console.log(item.job_name)
   }
 
   const editJob = () => {
@@ -91,7 +90,6 @@ const App = (props) => {
     setJobs(newJobs)
     localStorage.setItem('jobs', JSON.stringify(newJobs))
     setIsEdited(false)
-    console.log(props.jobs)
   }
 
   const popUpModal = useCallback(() => {
@@ -111,14 +109,14 @@ const App = (props) => {
             <h4 className="edit-title">Job Name</h4>
             <input
               className="edit-input"
-              defaultValue={defaultName}
+              defaultValue={''}
               onChange={(event) => setNewName(event.target.value)}
             ></input>
 
             <h4 className="edit-title">Job Priority</h4>
             <select
               className="edit-select"
-              defaultValue={defaultPriority}
+              defaultValue={'Regular'}
               onChange={(event) => setNewPriority(event.target.value)}
             >
               <option value="Regular">Choose </option>
@@ -210,7 +208,7 @@ const App = (props) => {
               <input
                 className="job-input"
                 type="text"
-                defaultValue={jobName}
+                defaultValue={props.name}
                 onChange={(e) => setJobName(e.target.value)}
                 onInput={() => setIsAdded(false)}
               ></input>
@@ -354,11 +352,7 @@ const App = (props) => {
                   </p>
                   <button
                     className="action-edit"
-                    onClick={() => (
-                      requestEdit(item),
-                      setDefaultName(item.job_name),
-                      setDefaultPriority(item.job_priority)
-                    )}
+                    onClick={() => requestEdit(item)}
                   ></button>
                   <button
                     className="action-remove"
@@ -394,6 +388,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { updateJob, importJob, deleteJob })(
-  App,
-)
+export default connect(mapStateToProps, {
+  updateJob,
+  importJob,
+  deleteJob,
+})(App)
