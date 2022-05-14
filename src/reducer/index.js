@@ -1,35 +1,32 @@
-import { EDIT_JOB } from '../actions/index'
+import { UPDATE_JOB, IMPORT_JOB, DELETE_JOB } from '../actions/index'
+import data from '../data/mock-data.json'
+
+let localJobs = JSON.parse(localStorage.getItem('jobs'))
+if (!localJobs) {
+  localStorage.setItem('jobs', JSON.stringify(data))
+  localJobs = data
+}
 
 const INITIAL_STATE = {
-  job: [
-    {
-      id: '',
-      job_name: '',
-      job_priority: '',
-      priority_number: '',
-    },
-  ],
+  jobs: localJobs,
 }
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case EDIT_JOB:
+    case UPDATE_JOB:
       return {
         ...state,
-        job: [
-          ...state.job,
-          {
-            id: action.payload.id,
-            job_name: action.payload.newName,
-            job_priority: action.payload.newPriority,
-            priority_number:
-              action.payload.priority === 'Urgent'
-                ? 1
-                : action.payload.priority === 'Regular'
-                ? 2
-                : 3,
-          },
-        ],
+        jobs: action.payload.newJobs,
+      }
+    case IMPORT_JOB:
+      return {
+        ...state,
+        jobs: [...state.jobs, action.payload.job],
+      }
+    case DELETE_JOB:
+      return {
+        ...state,
+        jobs: action.payload.newJobs,
       }
     default:
       return state
