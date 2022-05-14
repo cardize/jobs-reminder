@@ -111,7 +111,8 @@ const App = (props) => {
             <input
               id="edit-job-input"
               className="edit-input"
-              onChange={(event) => setNewName(event.target.value)}
+              onInput={(event) => setNewName(event.target.value)}
+              onFocus={(event) => event.target.select()}
             ></input>
 
             <h4 className="edit-title">Job Priority</h4>
