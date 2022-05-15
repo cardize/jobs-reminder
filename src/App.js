@@ -170,21 +170,29 @@ const App = (props) => {
 
   const filterJobsPriority = (value) => {
     if (value === 'All') {
-      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+      setFilteredJobs(jobs)
     } else {
       setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-      setFilteredJobs(jobs.filter((job) => job.job_priority === value))
+      setFilteredJobs(jobs.filter((job) => job.job_priority === value))(
+        filteredJobs.sort(
+          (a, b) => a.priority_number - b.priority_number || b.id - a.id,
+        ),
+      )
     }
     setCurrentPage(1)
   }
 
   const filterJobsName = (value) => {
-    setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-    setFilteredJobs(
-      jobs.filter((job) =>
-        job.job_name.toLowerCase().includes(value.toLowerCase()),
-      ),
-    )
+    if (value === '') {
+      setFilteredJobs(jobs)
+    } else {
+      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+      setFilteredJobs(
+        jobs.filter((job) =>
+          job.job_name.toLowerCase().includes(value.toLowerCase()),
+        ),
+      )
+    }
     setCurrentPage(1)
   }
 
@@ -200,7 +208,7 @@ const App = (props) => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
     const lastPageIndex = firstPageIndex + pageSize
-    if (filteredJobs.length > 0) {
+    if (filteredJobs.length) {
       return filteredJobs.slice(firstPageIndex, lastPageIndex)
     } else return orderedJobs.slice(firstPageIndex, lastPageIndex)
   }, [props.jobs, jobs, currentPage, pageSize, filteredJobs])
