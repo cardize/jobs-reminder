@@ -113,7 +113,7 @@ const App = (props) => {
             <input
               id="edit-job-input"
               className="edit-input"
-              onInputCapture={(event) => setNewName(event.target.value)}
+              onChange={(event) => setNewName(event.target.value)}
               onFocus={(event) => event.target.select()}
             ></input>
 
@@ -218,7 +218,15 @@ const App = (props) => {
     if (filteredJobs.length) {
       return filteredJobs.slice(firstPageIndex, lastPageIndex)
     } else return orderedJobs.slice(firstPageIndex, lastPageIndex)
-  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs, isSorted])
+  }, [
+    props.jobs,
+    jobs,
+    currentPage,
+    pageSize,
+    filteredJobs,
+    isSorted,
+    orderedJobs,
+  ])
 
   return (
     <div className="main-container">
