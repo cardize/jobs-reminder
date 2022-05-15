@@ -11,6 +11,7 @@ let pageSize = 5
 const App = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [jobs, setJobs] = useState(props.jobs)
+  const [filteredJobs, setFilteredJobs] = useState('')
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
   const [isRemoved, setIsRemoved] = useState(false)
@@ -168,13 +169,19 @@ const App = (props) => {
   }, [isRemoved, isEdited, jobs, removeJob, editJob])
 
   const filterJobsPriority = (value) => {
-    setJobs(props.jobs.filter((job) => job.job_priority === value))
+    if (value === 'All') {
+      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+    } else {
+      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+      setFilteredJobs(jobs.filter((job) => job.job_priority === value))
+    }
     setCurrentPage(1)
   }
 
   const filterJobsName = (value) => {
-    setJobs(
-      props.jobs.filter((job) =>
+    setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+    setFilteredJobs(
+      jobs.filter((job) =>
         job.job_name.toLowerCase().includes(value.toLowerCase()),
       ),
     )
@@ -184,16 +191,19 @@ const App = (props) => {
   const orderedJobs = useMemo(() => {
     const jobs = JSON.parse(localStorage.getItem('jobs'))
     localStorage.setItem('jobs', JSON.stringify(jobs))
+
     return props.jobs.sort(
       (a, b) => a.priority_number - b.priority_number || b.id - a.id,
     )
-  }, [props.jobs, jobs, currentPage, pageSize])
+  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs])
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
     const lastPageIndex = firstPageIndex + pageSize
-    return orderedJobs.slice(firstPageIndex, lastPageIndex)
-  }, [props.jobs, jobs, currentPage, pageSize])
+    if (filteredJobs.length > 0) {
+      return filteredJobs.slice(firstPageIndex, lastPageIndex)
+    } else return orderedJobs.slice(firstPageIndex, lastPageIndex)
+  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs])
 
   return (
     <div className="main-container">
@@ -268,7 +278,7 @@ const App = (props) => {
                       id="0"
                       name="Cardize"
                       defaultChecked="defaulChecked"
-                      onChange={() => setJobs(jobs)}
+                      onChange={() => filterJobsPriority('All')}
                     />
                     <p className="select-box__input-text">Priority (All)</p>
                   </div>
