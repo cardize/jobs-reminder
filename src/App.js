@@ -58,9 +58,10 @@ const App = (props) => {
   const removeJob = () => {
     const newJobs = jobs.filter((job) => job.id !== requestedId)
     localStorage.setItem('jobs', JSON.stringify(newJobs))
-    setJobs(newJobs)
     props.deleteJob(newJobs)
+    setJobs(newJobs)
     setIsRemoved(false)
+    console.log(props.jobs, newJobs)
   }
 
   const requestEdit = (item) => {
@@ -176,31 +177,29 @@ const App = (props) => {
 
   const filterJobsPriority = (value) => {
     if (value === 'All') {
-      setFilteredJobs(jobs)
+      return orderedJobs, setCurrentPage(1)
     } else {
-      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-      setFilteredJobs(jobs.filter((job) => job.job_priority === value))
+      return (
+        orderedJobs.filter((job) => job.job_priority === value),
+        setCurrentPage(1)
+      )
     }
-    setCurrentPage(1)
   }
 
   const filterJobsName = (value) => {
     if (value === '') {
-      setFilteredJobs(jobs)
+      return orderedJobs, setCurrentPage(1)
     } else {
-      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-      setFilteredJobs(
-        jobs.filter((job) =>
+      return (
+        orderedJobs.filter((job) =>
           job.job_name.toLowerCase().includes(value.toLowerCase()),
         ),
+        setCurrentPage(1)
       )
     }
-    setCurrentPage(1)
   }
 
   const orderedJobs = useMemo(() => {
-    const jobs = JSON.parse(localStorage.getItem('jobs'))
-    localStorage.setItem('jobs', JSON.stringify(jobs))
     if (isSorted === true) {
       return props.jobs.sort(
         (a, b) => b.priority_number - a.priority_number || b.id - a.id,
@@ -210,22 +209,34 @@ const App = (props) => {
         (a, b) => a.priority_number - b.priority_number || b.id - a.id,
       )
     }
-  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs, isSorted])
-
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * pageSize
-    const lastPageIndex = firstPageIndex + pageSize
-    if (filteredJobs.length) {
-      return filteredJobs.slice(firstPageIndex, lastPageIndex)
-    } else return orderedJobs.slice(firstPageIndex, lastPageIndex)
   }, [
+    isAdded,
+    isRemoved,
+    isEdited,
     props.jobs,
     jobs,
     currentPage,
     pageSize,
     filteredJobs,
     isSorted,
+  ])
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * pageSize
+    const lastPageIndex = firstPageIndex + pageSize
+    return orderedJobs.slice(firstPageIndex, lastPageIndex)
+  }, [
+    isAdded,
+    isRemoved,
+    isEdited,
+    props.jobs,
+    jobs,
+    currentPage,
+    pageSize,
+    isSorted,
     orderedJobs,
+    filterJobsName,
+    filterJobsPriority,
   ])
 
   return (
@@ -426,6 +437,7 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return {
     jobs: state.jobs,
+    filteredJobs: state.filteredJobs,
   }
 }
 
