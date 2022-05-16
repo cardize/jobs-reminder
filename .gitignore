@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/Appbackup.js
+/Appbackup
 /.pnp
 .pnp.js
 
