@@ -12,6 +12,7 @@ const App = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [jobs, setJobs] = useState(props.jobs)
   const [filteredJobs, setFilteredJobs] = useState('')
+  const [isSorted, setIsSorted] = useState(false)
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
   const [isRemoved, setIsRemoved] = useState(false)
@@ -57,9 +58,10 @@ const App = (props) => {
   const removeJob = () => {
     const newJobs = jobs.filter((job) => job.id !== requestedId)
     localStorage.setItem('jobs', JSON.stringify(newJobs))
-    setJobs(newJobs)
     props.deleteJob(newJobs)
+    setJobs(newJobs)
     setIsRemoved(false)
+    console.log(props.jobs, newJobs)
   }
 
   const requestEdit = (item) => {
@@ -112,7 +114,7 @@ const App = (props) => {
             <input
               id="edit-job-input"
               className="edit-input"
-              onInput={(event) => setNewName(event.target.value)}
+              onChange={(event) => setNewName(event.target.value)}
               onFocus={(event) => event.target.select()}
             ></input>
 
@@ -168,42 +170,74 @@ const App = (props) => {
     )
   }, [isRemoved, isEdited, jobs, removeJob, editJob])
 
+  const sortJobs = () => {
+    setIsSorted(!isSorted)
+    console.log(isSorted)
+  }
+
   const filterJobsPriority = (value) => {
     if (value === 'All') {
-      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
+      return orderedJobs, setCurrentPage(1)
     } else {
-      setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-      setFilteredJobs(jobs.filter((job) => job.job_priority === value))
+      return (
+        orderedJobs.filter((job) => job.job_priority === value),
+        setCurrentPage(1)
+      )
     }
-    setCurrentPage(1)
   }
 
   const filterJobsName = (value) => {
-    setFilteredJobs(JSON.parse(localStorage.getItem('jobs')))
-    setFilteredJobs(
-      jobs.filter((job) =>
-        job.job_name.toLowerCase().includes(value.toLowerCase()),
-      ),
-    )
-    setCurrentPage(1)
+    if (value === '') {
+      return orderedJobs, setCurrentPage(1)
+    } else {
+      return (
+        orderedJobs.filter((job) =>
+          job.job_name.toLowerCase().includes(value.toLowerCase()),
+        ),
+        setCurrentPage(1)
+      )
+    }
   }
 
   const orderedJobs = useMemo(() => {
-    const jobs = JSON.parse(localStorage.getItem('jobs'))
-    localStorage.setItem('jobs', JSON.stringify(jobs))
-
-    return props.jobs.sort(
-      (a, b) => a.priority_number - b.priority_number || b.id - a.id,
-    )
-  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs])
+    if (isSorted === true) {
+      return props.jobs.sort(
+        (a, b) => b.priority_number - a.priority_number || b.id - a.id,
+      )
+    } else {
+      return props.jobs.sort(
+        (a, b) => a.priority_number - b.priority_number || b.id - a.id,
+      )
+    }
+  }, [
+    isAdded,
+    isRemoved,
+    isEdited,
+    props.jobs,
+    jobs,
+    currentPage,
+    pageSize,
+    filteredJobs,
+    isSorted,
+  ])
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize
     const lastPageIndex = firstPageIndex + pageSize
-    if (filteredJobs.length > 0) {
-      return filteredJobs.slice(firstPageIndex, lastPageIndex)
-    } else return orderedJobs.slice(firstPageIndex, lastPageIndex)
-  }, [props.jobs, jobs, currentPage, pageSize, filteredJobs])
+    return orderedJobs.slice(firstPageIndex, lastPageIndex)
+  }, [
+    isAdded,
+    isRemoved,
+    isEdited,
+    props.jobs,
+    jobs,
+    currentPage,
+    pageSize,
+    isSorted,
+    orderedJobs,
+    filterJobsName,
+    filterJobsPriority,
+  ])
 
   return (
     <div className="main-container">
@@ -257,7 +291,8 @@ const App = (props) => {
           <div className="search-title">
             <h2>Jobs List</h2>
             <h3>
-              {jobs.length}/{jobs.length}
+              {filteredJobs.length === 0 ? jobs.length : filteredJobs.length}/
+              {jobs.length}
             </h3>
           </div>
           <div className="search-job-elements">
@@ -342,7 +377,9 @@ const App = (props) => {
           <div className="jobs-container">
             <div className="jobs-title">
               <h4 className="name">Name</h4>
-              <h4 className="priority">Priority</h4>
+              <h4 className="priority" onClick={() => sortJobs()}>
+                Priority
+              </h4>
               <h4 className="action">Action</h4>
             </div>
             {currentTableData.map((item) => {
@@ -400,6 +437,7 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return {
     jobs: state.jobs,
+    filteredJobs: state.filteredJobs,
   }
 }
 
