@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import './styles.scss'
 import logo from './images/logo.svg'
 import { useState, useMemo } from 'react'
@@ -19,9 +19,8 @@ const App = (props) => {
   const [isEdited, setIsEdited] = useState(false)
   const [requestedId, setRequestedId] = useState()
   const [isAdded, setIsAdded] = useState(false)
-  const [newName, setNewName] = useState('')
-  const [newPriority, setNewPriority] = useState('')
-
+  const newName = useRef(null)
+  const newPriority = useRef(null)
   const addJob = () => {
     setJobName(jobName)
     setJobPriority(jobPriority)
@@ -73,18 +72,17 @@ const App = (props) => {
   }
 
   const editJob = () => {
-    setNewName(newName)
-    setNewPriority(newPriority)
     const newJobs = jobs.map((job) => {
       if (job.id === requestedId) {
-        job.job_name = newName
-        job.job_priority = newPriority === '' ? 'Regular' : newPriority
+        job.job_name = newName.current.value
+        let currentPriority = newPriority.current.value
+        job.job_priority = currentPriority === '' ? 'Regular' : currentPriority
         job.priority_number =
-          newPriority === ''
+          currentPriority === ''
             ? 2
-            : newPriority === 'Urgent'
+            : currentPriority === 'Urgent'
             ? 1
-            : newPriority === 'Regular'
+            : currentPriority === 'Regular'
             ? 2
             : 3
       }
@@ -114,16 +112,11 @@ const App = (props) => {
             <input
               id="edit-job-input"
               className="edit-input"
-              onChange={(event) => setNewName(event.target.value)}
-              onFocus={(event) => event.target.select()}
+              ref={newName}
             ></input>
 
             <h4 className="edit-title">Job Priority</h4>
-            <select
-              className="edit-select"
-              defaultValue={'Regular'}
-              onChange={(event) => setNewPriority(event.target.value)}
-            >
+            <select className="edit-select" ref={newPriority}>
               <option value="Regular">Choose </option>
               <option value="Urgent">Urgent</option>
               <option value="Regular">Regular</option>
