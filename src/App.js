@@ -19,8 +19,8 @@ const App = (props) => {
   const [isEdited, setIsEdited] = useState(false)
   const [requestedId, setRequestedId] = useState()
   const [isAdded, setIsAdded] = useState(false)
-  const newName = useRef(null)
-  const newPriority = useRef(null)
+  const [newName, setNewName] = useState('')
+  const [newPriority, setNewPriority] = useState('')
   const addJob = () => {
     setJobName(jobName)
     setJobPriority(jobPriority)
@@ -60,22 +60,28 @@ const App = (props) => {
     props.deleteJob(newJobs)
     setJobs(newJobs)
     setIsRemoved(false)
-    console.log(props.jobs, newJobs)
+    setCurrentPage(1)
   }
 
   const requestEdit = (item) => {
     setRequestedId(item.id)
     setIsEdited(true)
-    document.getElementById(
-      'edit-job-input',
-    ).innerHTML = document.getElementById('edit-job-input').value
+    setNewPriority(item.job_priority)
+    setNewName(item.job_name)
+  }
+  const priorityChanced = (event) => {
+    setNewPriority(event.target.value)
+  }
+  const nameChanged = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
   }
 
   const editJob = () => {
     const newJobs = jobs.map((job) => {
       if (job.id === requestedId) {
-        job.job_name = newName.current.value
-        let currentPriority = newPriority.current.value
+        job.job_name = newName
+        let currentPriority = newPriority
         job.job_priority = currentPriority === '' ? 'Regular' : currentPriority
         job.priority_number =
           currentPriority === ''
@@ -112,11 +118,16 @@ const App = (props) => {
             <input
               id="edit-job-input"
               className="edit-input"
-              ref={newName}
+              value={newName}
+              onChange={nameChanged}
             ></input>
 
             <h4 className="edit-title">Job Priority</h4>
-            <select className="edit-select" ref={newPriority}>
+            <select
+              className="edit-select"
+              onChange={priorityChanced}
+              value={newPriority}
+            >
               <option value="Urgent">Urgent</option>
               <option value="Regular">Regular</option>
               <option value="Trivial">Trivial</option>
