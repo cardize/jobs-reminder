@@ -11,8 +11,9 @@ let pageSize = 5
 const App = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [jobs, setJobs] = useState(props.jobs)
-  const [filteredJobs, setFilteredJobs] = useState('')
   const [isSorted, setIsSorted] = useState(false)
+  const [filterPriority, setFilterPriority] = useState('All')
+  const [filterName, setFilterName] = useState('')
   const [jobName, setJobName] = useState('')
   const [jobPriority, setJobPriority] = useState('')
   const [isRemoved, setIsRemoved] = useState(false)
@@ -21,6 +22,7 @@ const App = (props) => {
   const [isAdded, setIsAdded] = useState(false)
   const [newName, setNewName] = useState('')
   const [newPriority, setNewPriority] = useState('')
+
   const addJob = () => {
     setJobName(jobName)
     setJobPriority(jobPriority)
@@ -66,21 +68,36 @@ const App = (props) => {
   const requestEdit = (item) => {
     setRequestedId(item.id)
     setIsEdited(true)
+    console.log(item.job_priority)
     setNewPriority(item.job_priority)
     setNewName(item.job_name)
   }
   const priorityChanced = (event) => {
+    console.log(event.target.value)
     setNewPriority(event.target.value)
   }
   const nameChanged = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
+  const newJobNameChanged = (event) => {
+    console.log(event.target.value)
+    setJobName(event.target.value)
+  }
+  const newJobPriorityChanced = (event) => {
+    console.log(event.target.value)
+    setJobPriority(event.target.value)
+  }
+  const filterNameChanged = (event) => {
+    console.log(event.target.value)
+    setFilterName(event.target.value)
+  }
 
   const editJob = () => {
     const newJobs = jobs.map((job) => {
       if (job.id === requestedId) {
         job.job_name = newName
+        console.log(newPriority)
         let currentPriority = newPriority
         job.job_priority = currentPriority === '' ? 'Regular' : currentPriority
         job.priority_number =
@@ -178,50 +195,45 @@ const App = (props) => {
     console.log(isSorted)
   }
 
-  const filterJobsPriority = (value) => {
-    if (value === 'All') {
-      return orderedJobs, setCurrentPage(1)
-    } else {
-      return (
-        orderedJobs.filter((job) => job.job_priority === value),
-        setCurrentPage(1)
-      )
-    }
-  }
-
-  const filterJobsName = (value) => {
-    if (value === '') {
-      return orderedJobs, setCurrentPage(1)
-    } else {
-      return (
-        orderedJobs.filter((job) =>
-          job.job_name.toLowerCase().includes(value.toLowerCase()),
-        ),
-        setCurrentPage(1)
-      )
-    }
-  }
-
   const orderedJobs = useMemo(() => {
+    console.log('rendered')
+    let finalJobList = jobs
+    console.log(finalJobList)
     if (isSorted === true) {
-      return props.jobs.sort(
+      finalJobList = finalJobList.sort(
         (a, b) => b.priority_number - a.priority_number || b.id - a.id,
       )
     } else {
-      return props.jobs.sort(
+      finalJobList = finalJobList.sort(
         (a, b) => a.priority_number - b.priority_number || b.id - a.id,
       )
     }
+    if (filterName !== '') {
+      console.log(filterName)
+      finalJobList = finalJobList.filter((item) =>
+        item.job_name
+          .toLocaleLowerCase('tr-TR')
+          .includes(filterName.toLocaleLowerCase('tr-TR')),
+      )
+    }
+    if (filterPriority !== 'All') {
+      console.log(filterPriority)
+      finalJobList = finalJobList.filter(
+        (item) => item.job_priority === filterPriority,
+      )
+    }
+    console.log(finalJobList)
+    return finalJobList
   }, [
     isAdded,
     isRemoved,
     isEdited,
-    props.jobs,
     jobs,
     currentPage,
     pageSize,
-    filteredJobs,
     isSorted,
+    filterName,
+    filterPriority,
   ])
 
   const currentTableData = useMemo(() => {
@@ -232,14 +244,11 @@ const App = (props) => {
     isAdded,
     isRemoved,
     isEdited,
-    props.jobs,
     jobs,
     currentPage,
     pageSize,
     isSorted,
     orderedJobs,
-    filterJobsName,
-    filterJobsPriority,
   ])
 
   return (
@@ -257,7 +266,8 @@ const App = (props) => {
               <input
                 className="job-input"
                 onFocus={(event) => event.target.select()}
-                onChange={(e) => setJobName(e.target.value)}
+                value={jobName}
+                onChange={newJobNameChanged}
                 onInput={() => setIsAdded(false)}
               ></input>
             </div>
@@ -268,7 +278,7 @@ const App = (props) => {
                 name="priority"
                 id="priority"
                 form="priorityform"
-                onChange={(event) => setJobPriority(event.target.value)}
+                onChange={newJobPriorityChanced}
               >
                 <option value="">Choose </option>
                 <option value="Urgent">Urgent</option>
@@ -294,15 +304,14 @@ const App = (props) => {
           <div className="search-title">
             <h2>Jobs List</h2>
             <h3>
-              {filteredJobs.length === 0 ? jobs.length : filteredJobs.length}/
-              {jobs.length}
+              {orderedJobs.length}/{jobs.length}
             </h3>
           </div>
           <div className="search-job-elements">
             <div className="search-job-element">
               <input
                 className="job-input-2"
-                onChange={(event) => filterJobsName(event.target.value)}
+                onChange={filterNameChanged}
                 placeholder="Job Name"
               ></input>
             </div>
@@ -316,7 +325,7 @@ const App = (props) => {
                       id="0"
                       name="Cardize"
                       defaultChecked="defaulChecked"
-                      onChange={() => filterJobsPriority('All')}
+                      onChange={() => setFilterPriority('All')}
                     />
                     <p className="select-box__input-text">Priority (All)</p>
                   </div>
@@ -326,7 +335,7 @@ const App = (props) => {
                       type="radio"
                       id="1"
                       name="Cardize"
-                      onChange={() => filterJobsPriority('Urgent')}
+                      onChange={() => setFilterPriority('Urgent')}
                     />
                     <p className="select-box__input-text">Urgent</p>
                   </div>
@@ -336,7 +345,7 @@ const App = (props) => {
                       type="radio"
                       id="2"
                       name="Cardize"
-                      onChange={() => filterJobsPriority('Regular')}
+                      onChange={() => setFilterPriority('Regular')}
                     />
                     <p className="select-box__input-text">Regular</p>
                   </div>
@@ -346,7 +355,7 @@ const App = (props) => {
                       type="radio"
                       id="3"
                       name="Cardize"
-                      onChange={() => filterJobsPriority('Trivial')}
+                      onChange={() => setFilterPriority('Trivial')}
                     />
                     <p className="select-box__input-text">Trivial</p>
                   </div>
@@ -423,7 +432,7 @@ const App = (props) => {
           <Pagination
             className="pagination-bar"
             currentPage={currentPage}
-            totalCount={jobs.length}
+            totalCount={orderedJobs.length}
             pageSize={pageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />
