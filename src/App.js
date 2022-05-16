@@ -68,28 +68,22 @@ const App = (props) => {
   const requestEdit = (item) => {
     setRequestedId(item.id)
     setIsEdited(true)
-    console.log(item.job_priority)
     setNewPriority(item.job_priority)
     setNewName(item.job_name)
   }
   const priorityChanced = (event) => {
-    console.log(event.target.value)
     setNewPriority(event.target.value)
   }
   const nameChanged = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
   const newJobNameChanged = (event) => {
-    console.log(event.target.value)
     setJobName(event.target.value)
   }
   const newJobPriorityChanced = (event) => {
-    console.log(event.target.value)
     setJobPriority(event.target.value)
   }
   const filterNameChanged = (event) => {
-    console.log(event.target.value)
     setFilterName(event.target.value)
   }
 
@@ -196,7 +190,6 @@ const App = (props) => {
   }
 
   const orderedJobs = useMemo(() => {
-    console.log('rendered')
     let finalJobList = jobs
     console.log(finalJobList)
     if (isSorted === true) {
@@ -215,6 +208,8 @@ const App = (props) => {
           .toLocaleLowerCase('tr-TR')
           .includes(filterName.toLocaleLowerCase('tr-TR')),
       )
+
+      setCurrentPage(1)
     }
     if (filterPriority !== 'All') {
       console.log(filterPriority)
