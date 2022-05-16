@@ -117,7 +117,6 @@ const App = (props) => {
 
             <h4 className="edit-title">Job Priority</h4>
             <select className="edit-select" ref={newPriority}>
-              <option value="Regular">Choose </option>
               <option value="Urgent">Urgent</option>
               <option value="Regular">Regular</option>
               <option value="Trivial">Trivial</option>
@@ -371,7 +370,7 @@ const App = (props) => {
             <div className="jobs-title">
               <h4 className="name">Name</h4>
               <h4 className="priority" onClick={() => sortJobs()}>
-                Priority
+                Priority⇅
               </h4>
               <h4 className="action">Action</h4>
             </div>
