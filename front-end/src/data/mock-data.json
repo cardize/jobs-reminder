@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "job_name": "Meeting with Rise Technology Team at 15:00",
+    "job_priority": "Urgent",
+    "priority_number": 1
+  },
+  {
+    "id": 2,
+    "job_name": "Work on the new case work with Redux",
+    "job_priority": "Regular",
+    "priority_number": 2
+  },
+  {
+    "id": 3,
+    "job_name": "Run 5 km at the start of the day",
+    "job_priority": "Regular",
+    "priority_number": 2
+  },
+  {
+    "id": 4,
+    "job_name": "Change the living room's carpet",
+    "job_priority": "Regular",
+    "priority_number": 2
+  },
+  {
+    "id": 5,
+    "job_name": "Watch the new Netflix series",
+    "job_priority": "Trivial",
+    "priority_number": 3
+  },
+  {
+    "id": 6,
+    "job_name": "Visit the new restaurant",
+    "job_priority": "Trivial",
+    "priority_number": 3
+  }
+]
