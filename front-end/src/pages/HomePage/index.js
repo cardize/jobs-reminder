@@ -1,17 +1,19 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux'
 import '../../styles/styles.scss'
 import {
     Header,
     Footer,
     Pagination,
+    DeleteModal,
+    EditModal,
 } from '../../components'
-import { connect } from 'react-redux'
 import {
     getJobPriority,
     importJob,
-    deleteJob,
-    updateJob
+    requestJob,
+    popUpStatus,
 } from '../../redux/actions'
 
 let pageSize = 5
@@ -24,12 +26,7 @@ const App = (props) => {
     const [filterName, setFilterName] = useState('')
     const [jobName, setJobName] = useState('')
     const [jobPriority, setJobPriority] = useState('')
-    const [isRemoved, setIsRemoved] = useState(false)
-    const [isEdited, setIsEdited] = useState(false)
-    const [requestedId, setRequestedId] = useState()
     const [isAdded, setIsAdded] = useState(false)
-    const [newName, setNewName] = useState('')
-    const [newPriority, setNewPriority] = useState('')
 
     useEffect(() => {
         axios
@@ -39,21 +36,19 @@ const App = (props) => {
     }, [])
 
     const addJob = () => {
-        console.log(props.priorityList)
-        console.log('asdasdas', currentTableData)
         setJobName(jobName)
         setJobPriority(jobPriority)
         const newJobs = JSON.parse(localStorage.getItem('jobs'))
         const job = {
             id: Date.now(),
             job_name: jobName,
-            job_priority: jobPriority === '' ? 'Regular' : jobPriority,
+            job_priority: jobPriority === '' ? props.priorityList[0].priority_name : jobPriority,
             priority_number:
                 jobPriority === ''
-                    ? 2
-                    : jobPriority === 'Urgent'
+                    ? 1
+                    : jobPriority === props.priorityList[1].priority_name
                         ? 1
-                        : jobPriority === 'Regular'
+                        : jobPriority === props.priorityList[2].priority_name
                             ? 2
                             : 3,
         }
@@ -62,38 +57,21 @@ const App = (props) => {
             localStorage.setItem('jobs', JSON.stringify([...newJobs, job]))
             setIsAdded(true)
         } else {
-            return alert('Job name is required')
+            return alert('Job name is required.')
         }
         setJobs(JSON.parse(localStorage.getItem('jobs')))
         props.importJob(job)
     }
 
-    const requestDelete = (id) => {
-        setRequestedId(id)
-        setIsRemoved(true)
+    const onRequestDelete = (item) => {
+        props.requestJob(item)
+        props.popUpStatus('delete')
+    }
+    const onRequestEdit = (item) => {
+        props.requestJob(item)
+        props.popUpStatus('edit')
     }
 
-    const removeJob = () => {
-        const newJobs = jobs.filter((job) => job.id !== requestedId)
-        localStorage.setItem('jobs', JSON.stringify(newJobs))
-        props.deleteJob(newJobs)
-        setJobs(newJobs)
-        setIsRemoved(false)
-        setCurrentPage(1)
-    }
-
-    const requestEdit = (item) => {
-        setRequestedId(item.id)
-        setIsEdited(true)
-        setNewPriority(item.job_priority)
-        setNewName(item.job_name)
-    }
-    const priorityChanced = (event) => {
-        setNewPriority(event.target.value)
-    }
-    const nameChanged = (event) => {
-        setNewName(event.target.value)
-    }
     const newJobNameChanged = (event) => {
         setJobName(event.target.value)
     }
@@ -104,109 +82,12 @@ const App = (props) => {
         setFilterName(event.target.value)
     }
 
-    const editJob = () => {
-        const newJobs = jobs.map((job) => {
-            if (job.id === requestedId) {
-                job.job_name = newName
-                console.log(newPriority)
-                let currentPriority = newPriority
-                job.job_priority = currentPriority === '' ? 'Regular' : currentPriority
-                job.priority_number =
-                    currentPriority === ''
-                        ? 2
-                        : currentPriority === 'Urgent'
-                            ? 1
-                            : currentPriority === 'Regular'
-                                ? 2
-                                : 3
-            }
-            return job
-        })
-        props.updateJob(newJobs)
-        setJobs(newJobs)
-        localStorage.setItem('jobs', JSON.stringify(newJobs))
-        setIsEdited(false)
-    }
-
-    const popUpModal = useCallback(() => {
-        return (
-            <>
-                <div
-                    className="pop-up-back"
-                    style={
-                        isRemoved || isEdited ? { display: 'flex' } : { display: 'none' }
-                    }
-                ></div>
-                <div
-                    className="popup-container"
-                    style={isEdited ? { display: 'flex' } : { display: 'none' }}
-                >
-                    <div className="popup-edit">
-                        <h4 className="edit-title">Job Name</h4>
-                        <input
-                            id="edit-job-input"
-                            className="edit-input"
-                            value={newName}
-                            onChange={nameChanged}
-                        ></input>
-
-                        <h4 className="edit-title">Job Priority</h4>
-                        <select
-                            className="edit-select"
-                            onChange={priorityChanced}
-                            value={newPriority}
-                        >
-                            <option value="Urgent">Urgent</option>
-                            <option value="Regular">Regular</option>
-                            <option value="Trivial">Trivial</option>
-                        </select>
-
-                        <div className="button-container">
-                            <button
-                                className="cancel-button"
-                                onClick={() => setIsEdited(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button className="approve-button" onClick={() => editJob()}>
-                                Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className="popup-container"
-                    style={isRemoved ? { display: 'flex' } : { display: 'none' }}
-                >
-                    <div className="popup-remove">
-                        <div className="confirmation-icon"></div>
-                        <h3 className="confirmation-text">
-                            Are you sure you want to delete it?
-                        </h3>
-                        <div className="button-container">
-                            <button
-                                className="cancel-button"
-                                onClick={() => setIsRemoved(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button className="approve-button" onClick={() => removeJob()}>
-                                Approve
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </>
-        )
-    }, [isRemoved, isEdited, jobs, removeJob, editJob])
-
     const sortJobs = () => {
         setIsSorted(!isSorted)
     }
 
     const orderedJobs = useMemo(() => {
-        let finalJobList = jobs
+        let finalJobList = props.jobs
         if (isSorted === true) {
             finalJobList = finalJobList.sort(
                 (a, b) => b.priority_number - a.priority_number || b.id - a.id,
@@ -232,9 +113,9 @@ const App = (props) => {
         }
         return finalJobList
     }, [
+        props.jobs,
+        jobs,
         isAdded,
-        isRemoved,
-        isEdited,
         jobs,
         currentPage,
         pageSize,
@@ -249,8 +130,6 @@ const App = (props) => {
         return orderedJobs.slice(firstPageIndex, lastPageIndex)
     }, [
         isAdded,
-        isRemoved,
-        isEdited,
         jobs,
         currentPage,
         pageSize,
@@ -261,6 +140,8 @@ const App = (props) => {
     return (
         <div className="main-container">
             <Header />
+            <DeleteModal />
+            <EditModal />
             <div className="body-container">
                 <div className="create-job">
                     <h2>Create New Job</h2>
@@ -286,7 +167,7 @@ const App = (props) => {
                             >
                                 <option
                                     className="select-box__option"
-                                    value="">Choose </option>
+                                    value="">Choose</option>
                                 {props.priorityList.length == 0 ? null : props.priorityList.map((item) => {
                                     return (
                                         <option
@@ -344,19 +225,18 @@ const App = (props) => {
                                     </div>
                                     {props.priorityList.length == 0 ? null : props.priorityList.map((item) => {
                                         return (
-                                            <>
-                                                <div className="select-box__value">
-                                                    <input
-                                                        className="select-box__input"
-                                                        type="radio"
-                                                        id={item.priority_number}
-                                                        name="Cardize"
-                                                        onChange={() => setFilterPriority(item.priority_name)}
-                                                    />
-                                                    <p className="select-box__input-text">{item.priority_name}</p>
-                                                </div>
-                                            </>
-
+                                            <div
+                                                key={item.id}
+                                                className="select-box__value">
+                                                <input
+                                                    className="select-box__input"
+                                                    type="radio"
+                                                    id={item.priority_number}
+                                                    name="Cardize"
+                                                    onChange={() => setFilterPriority(item.priority_name)}
+                                                />
+                                                <p className="select-box__input-text">{item.priority_name}</p>
+                                            </div>
                                         )
                                     })}
                                 </div>
@@ -368,21 +248,19 @@ const App = (props) => {
                                     </li>
                                     {props.priorityList.length == 0 ? null : props.priorityList.map((item) => {
                                         return (
-                                            <>
-                                                <li className="select-box__option">
-                                                    <label htmlFor={item.priority_number} aria-hidden="aria-hidden">
-                                                        {item.priority_name}
-                                                    </label>
-                                                </li>
-
-                                            </>
+                                            <li
+                                                key={item.id}
+                                                className="select-box__option">
+                                                <label htmlFor={item.priority_number} aria-hidden="aria-hidden">
+                                                    {item.priority_name}
+                                                </label>
+                                            </li>
                                         )
                                     })}
                                 </ul>
                             </div>
                         </div>
                     </div>
-
                     <div className="jobs-container">
                         <div className="jobs-title">
                             <h4 className="name">Name</h4>
@@ -412,22 +290,17 @@ const App = (props) => {
                                     </p>
                                     <button
                                         className="action-edit"
-                                        onClick={() => (
-                                            requestEdit(item),
-                                            (document.getElementById('edit-job-input').value =
-                                                item.job_name)
-                                        )}
+                                        onClick={() => onRequestEdit(item)}
                                     ></button>
                                     <button
                                         className="action-remove"
-                                        onClick={() => requestDelete(item.id)}
+                                        onClick={() => onRequestDelete(item)}
                                     ></button>
                                 </div>
                             )
                         })}
                     </div>
                 </div>
-                {popUpModal()}
                 <div>
                     <Pagination
                         className="pagination-bar"
@@ -448,12 +321,13 @@ const mapStateToProps = (state) => {
         priorityList: state.priorityList,
         jobs: state.jobs,
         filteredJobs: state.filteredJobs,
+        popUp: state.popUp,
     }
 }
 
 export default connect(mapStateToProps, {
     getJobPriority,
-    updateJob,
     importJob,
-    deleteJob,
+    requestJob,
+    popUpStatus,
 })(App)
