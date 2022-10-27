@@ -29,8 +29,10 @@
     }
 
     &.selected {
-      font-size: 22px;
-      color: black;
+      font-size: 20px;
+      color: rgb(52, 52, 251);
+      background-color: rgba(236, 236, 236, 0.516);
+      border-radius: 100%;
     }
 
     .arrow {
