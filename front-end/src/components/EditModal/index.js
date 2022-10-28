@@ -15,11 +15,11 @@ const EditModal = (props) => {
         const newJobs = jobs.map((job) => {
             if (job.id === props.requestedJob.id) {
                 job.job_name = newName == '' ? props.requestedJob.job_name : newName
-                let currentPriority = newPriority ? newPriority : props.requestedJob.job_priority
-                job.job_priority = currentPriority === '' ? 'Regular' : currentPriority
+                let currentPriority = newPriority
+                job.job_priority = currentPriority === '' ? 'Urgent' : currentPriority
                 job.priority_number =
                     currentPriority === ''
-                        ? 2
+                        ? 1
                         : currentPriority === 'Urgent'
                             ? 1
                             : currentPriority === 'Regular'
@@ -62,7 +62,7 @@ const EditModal = (props) => {
                         <select
                             className="edit-select"
                             onChange={priorityChanced}
-                            value={newPriority ? newPriority : props.requestedJob.job_priority}
+                            value={newPriority}
                         >
                             {props.priorityList.length == 0 ? null : props.priorityList.map((item) => {
                                 return (
