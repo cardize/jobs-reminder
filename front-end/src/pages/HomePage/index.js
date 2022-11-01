@@ -46,9 +46,9 @@ const App = (props) => {
             priority_number:
                 jobPriority === ''
                     ? 1
-                    : jobPriority === props.priorityList[1].priority_name
+                    : jobPriority === props.priorityList[0].priority_name
                         ? 1
-                        : jobPriority === props.priorityList[2].priority_name
+                        : jobPriority === props.priorityList[1].priority_number
                             ? 2
                             : 3,
         }
