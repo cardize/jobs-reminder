@@ -44,14 +44,12 @@ const App = (props) => {
             job_name: jobName,
             job_priority: jobPriority === '' ? props.priorityList[0].priority_name : jobPriority,
             priority_number:
-                jobPriority == ''
-                    ? 1
-                    : jobPriority == 'Urgent'
-                        ? 1
-                        : jobPriority == 'Regular'
-                            ? 2
-                            : 3,
+                jobPriority == '' ? 1 :
+                    jobPriority == props.priorityList[0].priority_name ? 1 :
+                        jobPriority == props.priorityList[1].priority_name ? 2 :
+                            jobPriority == props.priorityList[2].priority_name ? 3 : 1
         }
+        console.log(props.jobs)
         if (jobName !== '') {
             localStorage.setItem('jobs', JSON.stringify([...newJobs, job]))
             setIsAdded(true)
