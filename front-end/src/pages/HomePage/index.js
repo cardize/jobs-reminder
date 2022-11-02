@@ -52,7 +52,6 @@ const App = (props) => {
                             ? 2
                             : 3,
         }
-        console.log(props.priorityList[2].priority_name)
         if (jobName !== '') {
             localStorage.setItem('jobs', JSON.stringify([...newJobs, job]))
             setIsAdded(true)
