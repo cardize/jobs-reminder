@@ -31,7 +31,7 @@ const App = (props) => {
     useEffect(() => {
         axios
             .get('http://localhost:3001/taskdb')
-            .then((res) => { props.getJobPriority(res.data) && console.log(res.data) })
+            .then((res) => props.getJobPriority(res.data))
             .catch((error) => console.log({ error }))
     }, [])
 
